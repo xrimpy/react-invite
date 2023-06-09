@@ -16,29 +16,25 @@ const signin = async(email, password) => {
     }
 
 const logout = async() => {
-    // const headers = { 'Authorization': localStorage.getItem('token') };
-    //   fetch("/logout", { headers, method: 'DELETE' })
-    //     .then((response) => {
-    //       if (response.ok) {
-    //         return response.json();
-    //       }
-    //       throw new Error("Network response was not ok.");
-    //     }).catch(function (error) {
-    //             console.error(error)
-    //             throw error;
-    //         });
+      fetch("/logout", { headers: { 'Authorization': localStorage.getItem('token') }, method: 'DELETE' })
+        .then((response) => {
+          if (response.ok) {
+            return response.json();
+          }
+        }).catch(function (error) {
+                console.error(error)
+                throw error;
+            });
             
-    // console.log(localStorage.getItem('token')   )
-
-    return axios.delete("/logout", { headers :{ 'Authorization': localStorage.getItem('token') }})
-    .then(function (response) {
-        console.log(response.data)
-        return response.data;
-    })
-    .catch(function (error) {
-        console.error(error)
-        throw error;
-    });
+    // return axios.delete("/logout", {}, { headers :{ 'Authorization': localStorage.getItem('token') }})
+    // .then(function (response) {
+    //     console.log(response.data)
+    //     return response.data;
+    // })
+    // .catch(function (error) {
+    //     console.error(error)
+    //     throw error;
+    // });
 }
 
 const authService = {
