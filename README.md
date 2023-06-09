@@ -1,32 +1,46 @@
-# README
+## Application
+```
+# Setup
+bin/setup
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+# Run
+bin/dev
+```
 
-Things you may want to cover:
+## Rails Features
+- Ruby 3.0.1
+- Rails Version 7.0.5 ( Closest stable to 7.0.1 )
 
-* Ruby version
+### Javascript
+- ESBuild
 
-* System dependencies
+###  Authentication
+- devise
+- devise-jwt
+- devise_invitable
 
-* Configuration
+### Invitations
+- Customer  InviteMailer for React Acceptance Link
 
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+### Invite API
+- Send  Invitation
+- Accept  Invitation
+- jsonapi-serializer
+- Serializer  for  UserModel
 
 
-ESBuild
+## React
+- Layout  Component
+- PrivateRoute
+- AuthService for Authorization
+- Toasts  for  Notifications
+- MaterialUI  5
 
-- Private Routes
-- Axios
-- Layout
-- Toasts
+## Wishful Features if I had more time
+Proper  Routes /api/v1/auth/users  
+*Gave  up  after  tokens  stopped  working  with  this  setup  after  a  while*
+RSpec test
+
+React: Redux  for  State
+Extract  out  Invites  in  its  own Service
+Cypress  test

@@ -9,8 +9,10 @@ import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
+import axios from "axios";
+import toast, { Toaster } from "react-hot-toast";
 
-const Signup = () => {
+const Register = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -33,31 +35,35 @@ const Signup = () => {
     if (email.length == 0 || password.length == 0 )
       return;
 
-    const body = {
-      email,
-      password,
-    };
+      axios
+        .post("/signup", { 'user': { email, password  } })
+        .then((response) => {
+          if(response.headers['authorization']) {
+            localStorage.setItem('token', response.headers['authorization']);
+            console.log(response.headers['authorization'])
+            navigate("/invitations");
+          }
+        }).catch(function (error) {
+          toast.error('Invalid Credentials / Email already exists')
+        });
+        
+    }
 
-    const token = document.querySelector('meta[name="csrf-token"]').content;
-
-    fetch(url, {
-      method: "POST",
-      headers: {
-        "X-CSRF-Token": token,
-        "Content-Type": "application/json",
-      },
-      // body: JSON.stringify(body),
-      body: JSON.stringify({ 'user': body }),
-    })
-      .then((response) => {
-        if (response.ok) {
-          return response.json();
-        }
-        throw new Error("Network response was not ok.");
-      })
-      .then((response) => navigate(`/`))
-      .catch((error) => console.log(error.message));
-  };
+  //   fetch(url, {
+  //     method: "POST",
+  //     // body: JSON.stringify(body),
+  //     body: JSON.stringify({ 'user': { email, password } }),
+  //   })
+  //     .then((response) => {
+  //       debugger
+  //       if (response.ok) {
+  //         return response.json();
+  //       }
+  //       throw new Error("Network response was not ok.");
+  //     })
+  //     .then((response) => navigate(`/`))
+  //     .catch((error) => console.log(error.message));
+  // };
 
   return (
     <Container component="main" maxWidth="sm">
@@ -102,30 +108,21 @@ const Signup = () => {
             onChange={(event) => onChange(event, setPassword)}
           />
 
-          <FormControlLabel
-            control={<Checkbox value="remember" color="primary" />}
-            label="Remember me"
-          />
-
           <Button
             type="submit"
             fullWidth
             variant="contained"
             sx={{ mt: 3, mb: 2 }}
           >
-            Sign In
+            Sign Up
           </Button>
 
           <Grid container>
             <Grid item xs>
-              <Link href="#" variant="body2">
-                Forgot password?
-              </Link>
+              <Link to='/'>Home</Link>
             </Grid>
             <Grid item>
-              <Link href="#" variant="body2">
-                {"Don't have an account? Sign Up"}
-              </Link>
+              <Link to='/'>Sign In</Link>
             </Grid>
           </Grid>
 
@@ -135,4 +132,4 @@ const Signup = () => {
   );
 };
 
-export default Signup;
+export default Register;

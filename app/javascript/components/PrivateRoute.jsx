@@ -1,6 +1,5 @@
 import { Link, useNavigate, Navigate } from "react-router-dom";
 import React, { useState, useEffect} from "react";
-import toast, { Toaster } from 'react-hot-toast';
 
 const PrivateRoute = ({ children }) => {
     const navigate = useNavigate();
@@ -13,7 +12,6 @@ const PrivateRoute = ({ children }) => {
     return children;
       
   }
-  
 export default PrivateRoute;
   
   

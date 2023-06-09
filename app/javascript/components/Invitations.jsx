@@ -1,19 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import {  useNavigate } from "react-router-dom";
 
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import Container from "@mui/material/Container";
-import AppBar from "@mui/material/AppBar";
-import Toolbar from "@mui/material/Toolbar";
-
-import AccountCircle from '@mui/icons-material/AccountCircle';
-import MenuIcon from '@mui/icons-material/Menu';
 
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
@@ -66,40 +58,47 @@ const Invitations = () => {
     if (email.length == 0  )
       return;
 
-    axios.post(url, { 'invitation': { 'email': email } })
+      
+    axios.post(url, { 'invitation': { 'email': email } }, {  headers: { 'Authorization': localStorage.getItem('token') } })
     .then(function (response) {
       console.log("Success");
-      const newInvitations = invitations.concat({ id: response.data.id,  attributes: { email: response.data.email }});
+      const newInvitations = [{ id: response.email,  attributes: { email: response.data.email }}].concat(invitations);
+      
+      console.log(newInvitations);
       setInvitations(newInvitations);
     })
     .catch(function (error) {
       console.log("Erorr");
     });
-
-
     };
+
 
     useEffect(() => {
       const url = "/api/v1/invites";
 
+      console.log(localStorage.getItem('token'))
       const headers = { 'Authorization': localStorage.getItem('token') };
       fetch(url, { headers })
-        .then((response) => {
-          if (response.ok) {
-            return response.json();
-          }
-          throw new Error("Network response was not ok.");
-        })
-        .then((response) => { 
-          setInvitations(response.data) })
-        .catch(() => navigate("/"));
-    }, []);
-
-
+      .then((response) => {
+        if (response.ok) {
+          return response.json();
+        }
+        throw new Error("Network response was not ok.");
+      })
+      .then((response) => { 
+        setInvitations(response.data) })
+        .catch(() => {
+          toast.error('Please Login')
+          navigate("/")
+        
+        });
+      }, []);
+      
+      
 
     const allInvitations = invitations.map((invitation, index) => (
 
-      <ListItem disablePadding key={invitation.id}>
+      <ListItem disablePadding key={invitation.attributes.email}>
       <ListItemButton  dense>
         <ListItemAvatar>
           <Avatar>
@@ -112,11 +111,10 @@ const Invitations = () => {
   
     ));
     const noInvitations = (
-      <div className="vw-100 vh-50 d-flex align-items-center justify-content-center">
-        <h5>
-          Loading
-        </h5>
-      </div>
+
+      <Typography component="h3" variant="h5">
+          You have no Invitations
+        </Typography>
     );
 
     
@@ -154,7 +152,9 @@ const Invitations = () => {
         </Grid>
         </Box>
       <List>
-        {invitations.length > 0 ? allInvitations : noInvitations}
+        {  allInvitations  }
+        
+        { invitations.length == 0 && noInvitations } 
       </List>
 
               

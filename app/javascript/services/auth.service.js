@@ -16,7 +16,19 @@ const signin = async(email, password) => {
     }
 
 const logout = async() => {
-    console.log(localStorage.getItem('token')   )
+    // const headers = { 'Authorization': localStorage.getItem('token') };
+    //   fetch("/logout", { headers, method: 'DELETE' })
+    //     .then((response) => {
+    //       if (response.ok) {
+    //         return response.json();
+    //       }
+    //       throw new Error("Network response was not ok.");
+    //     }).catch(function (error) {
+    //             console.error(error)
+    //             throw error;
+    //         });
+            
+    // console.log(localStorage.getItem('token')   )
 
     return axios.delete("/logout", { headers :{ 'Authorization': localStorage.getItem('token') }})
     .then(function (response) {

@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
@@ -8,34 +8,46 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import toast, { Toaster } from 'react-hot-toast';
+import axios from "axios";
 
-import authService from "../services/auth.service";
 
-const Signin = () => {
+const AcceptInvite = () => {
   const navigate = useNavigate();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-
+  
   const onChange = (event, setFunction) => {
     setFunction(event.target.value);
   };
-
-
+  
+  const [searchParams, setSearchParams] = useSearchParams({});
+  
+  const token = searchParams.get("token");
+  const [password, setPassword] = useState("");
  
   const handleLogin = async(event ) => {
     event.preventDefault();
 
-    if (email.length == 0 || password.length == 0 )
+    if (token.length == 0 || password.length == 0 )
       return;
 
-      try {
-        await authService.signin(email, password).then(
-          () => {
-            navigate("/invitations");
-          })
-           } catch(err){
-            toast.error('Invalid Credentials / User does not exist')
-           }
+      axios
+        .post("/api/v1/invites/accept", { 'invitation': { token, password } })
+        .then((response) => {
+          console.log(response)
+
+          if(response.data['error'] == 'Invalid token')
+          {
+            toast.error("Invalid token / Already Used")
+          }
+          else
+          {
+            toast.success("User Created: Please Sign In")
+            navigate("/signin")
+          }
+        }).catch(function (error) {
+          console.log(error)
+            throw error;
+            })
+
   };
 
 
@@ -55,23 +67,23 @@ const Signin = () => {
         }}
       >
         <Typography component="h1" variant="h5">
-          Sign In
+          Accept Invitation
         </Typography>
 
         <Box component="form" onSubmit={handleLogin} noValidate sx={{ mt: 1 }}>
           <TextField
             margin="normal"
             required
+            disabled
             fullWidth
-            id="email"
-            label="Email Address"
-            name="email"
-            autoComplete="email"
-            autoFocus
-            onChange={(event) => onChange(event, setEmail)}
+            id="token"
+            label="Token"
+            name="token"
+            value={token}
             />
 
           <TextField
+            autoFocus
             margin="normal"
             required
             fullWidth
@@ -89,7 +101,7 @@ const Signin = () => {
             variant="contained"
             sx={{ mt: 3, mb: 2 }}
           >
-            Sign In
+            Sign Up
           </Button>
 
           <Grid container>
@@ -97,7 +109,7 @@ const Signin = () => {
               <Link to='/'>Home</Link>
             </Grid>
             <Grid item>
-              <Link to='/register'>Sign Up</Link>
+              <Link to='/signin'>Sign In</Link>
             </Grid>
           </Grid>
 
@@ -108,4 +120,4 @@ const Signin = () => {
   );
 };
 
-export default Signin;
+export default AcceptInvite;
