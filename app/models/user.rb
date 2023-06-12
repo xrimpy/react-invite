@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class User < ApplicationRecord
   include Devise::JWT::RevocationStrategies::JTIMatcher
 
@@ -6,10 +8,9 @@ class User < ApplicationRecord
 
   attr_accessor :invitation_instructions
 
-def self.invite_user!(attributes={}, invited_by=nil)
- self.invite!(attributes, invited_by) do |invitable|
-   invitable.invitation_instructions = :guest_invitation_instructions
- end
-end
-
+  def self.invite_user!(attributes = {}, invited_by = nil)
+    invite!(attributes, invited_by) do |invitable|
+      invitable.invitation_instructions = :guest_invitation_instructions
+    end
+  end
 end

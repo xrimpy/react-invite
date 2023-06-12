@@ -50,14 +50,11 @@ const Invitations = () => {
   };
 
 
-
   const onSubmit = (event) => {
     event.preventDefault();
 
-
     if (email.length == 0  )
       return;
-
       
     axios.post(url, { 'invitation': { 'email': email } }, {  headers: { 'Authorization': localStorage.getItem('token') } })
     .then(function (response) {

@@ -34,13 +34,5 @@ bin/dev
 - PrivateRoute
 - AuthService for Authorization
 - Toasts  for  Notifications
-- MaterialUI  5
+- MaterialUI 5
 
-## Wishful Features if I had more time
-Proper  Routes /api/v1/auth/users  
-*Gave  up  after  tokens  stopped  working  with  this  setup  after  a  while*
-RSpec test
-
-React: Redux  for  State
-Extract  out  Invites  in  its  own Service
-Cypress  test

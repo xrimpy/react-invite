@@ -1,9 +1,8 @@
+# frozen_string_literal: true
+
 class InviteMailer < Devise::Mailer
-
-def invitation_instructions(record, token, opts={})
-  @token = token
-  devise_mail(record, record.invitation_instructions || :invitation_instructions, opts)
-end
-
-
+  def invitation_instructions(record, token, opts = {})
+    @token = token
+    devise_mail(record, record.invitation_instructions || :invitation_instructions, opts)
+  end
 end
